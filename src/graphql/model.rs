@@ -57,8 +57,9 @@ impl Query {
         }
     }
     /// Current rooms
-    async fn room(&self, ctx: &Context<'_>) -> FieldResult<Vec<RoomInfo>> {
+    async fn room(&self, ctx: &Context<'_>, token: String) -> FieldResult<Vec<RoomInfo>> {
         let ctx = ctx.data::<Ctx>()?;
+		if Some(token) == ctx.config.admin_token {
         let r = ctx
             .udp_server
             .get_plugin(&LDN_MITM_TYPE, |ldn_mitm| ldn_mitm.map(|i| i.room_info()))
@@ -66,6 +67,9 @@ impl Query {
             .ok_or("This plugin is not available")?;
         let r = r.lock().await;
         Ok(r.iter().map(|(_, v)| v.clone()).collect())
+		} else {
+            Err("Permission denied".into())
+        }
     }
 }
 

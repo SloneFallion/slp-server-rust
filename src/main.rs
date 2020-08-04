@@ -46,7 +46,7 @@ struct Opt {
     #[structopt(short, long)]
     ignore_idle: bool,
     /// Block rules
-    #[structopt(short, long, default_value = "tcp:5000,tcp:21", use_delimiter = true)]
+    #[structopt(short, long, default_value = "tcp:5000,tcp:6000,tcp:21", use_delimiter = true)]
     block_rules: Vec<plugin::blocker::Rule>,
 }
 
